@@ -16,25 +16,17 @@ namespace SpursDesktop
             text = que[0];
             // Пересохрняем ответы
             String temp = que[1];
+            // Преобразуем строку
+            temp = temp.Replace("</p>", "");
+            temp = temp.Replace("\"></img>", "");
+            temp = temp.Replace("<img src=\"", "<p>:i:");
             // Пока есть строки
-            while (temp.IndexOf("<p>") != -1)
+            String[] parts = temp.Split(new String[] { "<p>" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (String i in parts)
             {
-                // Добавляем в список первый подвернувшийся ответ
-                answer += temp.Substring(temp.IndexOf("<p>") + 3, temp.IndexOf("</p>") - temp.IndexOf("<p>") - 3) + "\n";
-                // Удаляем весь текст с начала по конец этого ответа
-                temp = temp.Remove(0, temp.IndexOf("</p>") + 4);
-            }
-            // Восстанавливаем строку с ответами
-            temp = que[1];
-            // Пока есть ссылки на картинки
-            while (temp.IndexOf("src=\"") != -1)
-            {
-                // Находим начало адреса картинки
-                int start = temp.IndexOf("src=\"") + 5;
-                // Добавляем адрес картинки в список
-                image += temp.Substring(start, temp.IndexOf("\"", start) - start) + "\n";
-                // Удаляем текст с начала по конец адреса картинки
-                temp = temp.Remove(0, temp.IndexOf("\"", start) + 1);
+                answer += i + "\n";
+                if (i.StartsWith(":i:"))
+                    image += i.Remove(0,3) + "\n";
             }
         }
 
@@ -52,15 +44,25 @@ namespace SpursDesktop
             String hanswer = "";
             // Разбиваем текст ответа на строки
             String[] ansParts = answer.Split(new String[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            // Разбиваем список картинок на строки
+            String[] imgParts = image.Split(new String[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             // Каждую строку заносим отдельно в переменную
             foreach (String i in ansParts)
             {
+                if (!i.StartsWith(":i:"))
                 hanswer += "<p>" + i + "</p>";
+                else
+                for(int im=0; im<imgParts.Length; im++)
+                    if (imgParts[im].Contains(i.Remove(0, 3)))
+                        {
+                            hanswer += "<img src=\"" + imgParts[im] + "\"></img>";
+                            imgParts[im] = "";
+                        }
             }
-            // Повторяем для картинок
-            String[] imgParts = image.Split(new String[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            // Вносим картинки, которые не упоминались отдельно
             foreach (String i in imgParts)
             {
+                if (i!="")
                 hanswer += "<img src=\""+i+"\"></img>";
             }
             // Говорим, что получили новую ячейку
