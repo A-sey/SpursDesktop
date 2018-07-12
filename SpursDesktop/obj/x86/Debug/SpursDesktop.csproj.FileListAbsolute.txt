@@ -1,0 +1,13 @@
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\x86\Debug\SpursDesktop.exe.config
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\x86\Debug\SpursDesktop.exe.manifest
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\x86\Debug\SpursDesktop.application
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\x86\Debug\SpursDesktop.exe
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\x86\Debug\SpursDesktop.pdb
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.Form1.resources
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.Properties.Resources.resources
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.csproj.GenerateResource.Cache
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.exe.manifest
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.application
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.exe
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.pdb
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\x86\Debug\SpursDesktop.csprojResolveAssemblyReference.cache

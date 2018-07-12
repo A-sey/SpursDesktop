@@ -41,7 +41,7 @@ namespace SpursDesktop
             // Создаём новую коллекцию из String
             List<String> DBs = new List<string>();
             // Заносим в неё имена подходящих файлов
-            foreach(String i in files)
+            foreach (String i in files)
             {
                 if (i.EndsWith(".html"))
                     DBs.Add(Path.GetFileName(i));
@@ -63,9 +63,9 @@ namespace SpursDesktop
                 return;
             }
             // Создаём папку для изображений
-            Directory.CreateDirectory(PATH+Path.GetFileNameWithoutExtension(fname));
+            Directory.CreateDirectory(PATH + Path.GetFileNameWithoutExtension(fname));
             // Открываем файл
-            StreamReader streamReader = new StreamReader(PATH + fname,Encoding.Unicode);
+            StreamReader streamReader = new StreamReader(PATH + fname, Encoding.Unicode);
             // Копируем его содержимое в переменную
             String HTML = streamReader.ReadToEnd();
             // Закрываем файл
@@ -110,7 +110,7 @@ namespace SpursDesktop
         }
 
         // Заполнение БД
-        private void FillDB (String HTML)
+        private void FillDB(String HTML)
         {
             // Удаляем ненужные строки и переносы
             HTML = HTML.Replace(BEG, "");
@@ -125,13 +125,13 @@ namespace SpursDesktop
             {
                 DataBase.Add(new Quest(i));
             }
-        }   
-        
+        }
+
         // Заполняем список вопросов
         private void FillQuestList()
         {
             listBox2.Items.Clear();
-            foreach(Quest i in DataBase)
+            foreach (Quest i in DataBase)
             {
                 listBox2.Items.Add(i.GetQuestion());
             }
@@ -182,6 +182,7 @@ namespace SpursDesktop
             button2.Enabled = f;
             button4.Enabled = f;
             button5.Enabled = f;
+            exportTSMI.Enabled = f;
         }
 
         //Если изменился текст вопроса
@@ -200,7 +201,7 @@ namespace SpursDesktop
             String text = ((TextBox)sender).Text;
             if (text == "")
                 return;
-            DataBase[numb].SetAnswer(text.Replace("\r",""));
+            DataBase[numb].SetAnswer(text.Replace("\r", ""));
         }
 
         // Добавление нового вопроса
@@ -251,12 +252,15 @@ namespace SpursDesktop
             String newIMGName = Path.GetFileNameWithoutExtension(comboBox1.Text) + "/" + Path.GetFileName(newName);
             DataBase[numb].SetImage(DataBase[numb].GetImage() + newIMGName + "\n");
             FillImages();
+            if (!textBox2.Text.ToString().EndsWith("\n"))
+                textBox2.Text += "\r\n";
+            textBox2.Text += ":i:" + newIMGName + "\r\n";
         }
         // Выбор имени картинки
         private String GetEmptyImageNumber(String ext)
         {
             // Получаем новый путь
-            String newPath = PATH + Path.GetFileNameWithoutExtension(comboBox1.Text)+"/";
+            String newPath = PATH + Path.GetFileNameWithoutExtension(comboBox1.Text) + "/";
             // Находим первое незанятое имя
             int imageNumber = 0;
             while (File.Exists(newPath + imageNumber.ToString() + ext))
@@ -271,7 +275,7 @@ namespace SpursDesktop
                 return;
             String filename = (String)listBox1.SelectedItem;
             DataBase[numb].SetImage(DataBase[numb].GetImage().Replace(filename + "\n", ""));
-            File.Delete(PATH+"/"+filename);
+            File.Delete(PATH + "/" + filename);
             FillImages();
         }
 
@@ -292,6 +296,79 @@ namespace SpursDesktop
             streamWriter.Write(END);
             streamWriter.Close();
             file.Close();
+        }
+
+        private void InFile()
+        {
+            String oneFileName = PATH + Path.GetFileNameWithoutExtension(comboBox1.Text) + ".spr";
+            FileStream oneF = new FileStream(oneFileName, FileMode.Create);
+            String DBname = oneFileName.Replace(".spr", "");
+            AddFile(DBname + ".html", oneF);
+            String[] files = Directory.GetFiles(DBname);
+            foreach (String i in files)
+                AddFile(i, oneF);
+            oneF.Close();
+        }
+
+        private void AddFile(String name, FileStream FS)
+        {
+            FileStream file = new FileStream(name, FileMode.Open);
+            byte[] buff = new byte[file.Length];
+            for (int i = 0; i < file.Length; i++)
+                buff[i] = (byte)file.ReadByte();
+            file.Close();
+            byte[] spacer = { 255, 7, 9, 255 };
+            FS.Write(spacer, 0, spacer.Length);
+            byte[] bname = Encoding.Unicode.GetBytes(name);
+            FS.Write(bname, 0, bname.Length);
+            FS.Write(spacer, 0, spacer.Length);
+            FS.Write(buff, 0, buff.Length);
+        }
+
+        private void FromFile(String spr)
+        {
+            FileStream file = new FileStream(spr, FileMode.Open);
+            byte[] spacer = new byte[4];
+            file.Read(spacer, 0, 4);
+            byte[] buff = new byte[file.Length];
+            file.Read(buff, 0, (int)file.Length);
+            List<byte[]> lines = ByteSplit(buff, spacer);
+            for (int i = 0; i < lines.Count; i += 2)
+                FileCreate(Encoding.Unicode.GetString(lines[i]), lines[i + 1]);
+        }
+
+        private List<byte[]> ByteSplit(byte[] buffer, byte[] sp)
+        {
+            byte[] buff = new byte[buffer.Length + sp.Length];
+            buff = buffer;
+            List<byte[]> lines = new List<byte[]>();
+            int first = 0;
+            for (int i = 0; i < buff.Length - sp.Length; i++)
+            {
+                if ((buff[i] == sp[0] && buff[i + 1] == sp[1] && buff[i + 2] == sp[2] && buff[i + 3] == sp[3]) || i == buff.Length - sp.Length - 1)
+                {
+                    byte[] temp = new byte[i - first];
+                    for (int j = 0; j < temp.Length; j++)
+                        temp[j] = buff[j + first];
+                    lines.Add(temp);
+                    i += sp.Length - 1;
+                    first = i + 1;
+                }
+            }
+            return lines;
+        }
+
+        private void FileCreate(String name, byte[] content)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(name));
+            FileStream FS = new FileStream(name, FileMode.Create);
+            FS.Write(content, 0, content.Length);
+            FS.Close();
+        }
+
+        private void ExportTSMI_Click(object sender, EventArgs e)
+        {
+            InFile();
         }
     }
 }

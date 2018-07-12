@@ -1,0 +1,12 @@
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\Release\SpursDesktop.exe.config
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\Release\SpursDesktop.exe.manifest
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\Release\SpursDesktop.application
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\Release\SpursDesktop.exe
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\bin\Release\SpursDesktop.pdb
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\Release\SpursDesktop.Form1.resources
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\Release\SpursDesktop.Properties.Resources.resources
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\Release\SpursDesktop.csproj.GenerateResource.Cache
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\Release\SpursDesktop.exe.manifest
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\Release\SpursDesktop.application
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\Release\SpursDesktop.exe
+D:\Информатика 4 семестр\SpursDesktop\SpursDesktop\obj\Release\SpursDesktop.pdb
